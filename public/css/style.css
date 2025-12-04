@@ -87,3 +87,18 @@ button {
   border-radius: 6px;
   font-weight: 700;
 }
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.layout table {
+  flex: 1;
+}
+
+.sp-sign {
+  max-width: 260px;
+  height: auto;
+  display: block;
+}
