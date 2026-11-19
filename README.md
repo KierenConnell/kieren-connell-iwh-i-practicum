@@ -68,9 +68,9 @@ Never commit `.env`, access tokens or client secrets. `.gitignore` excludes loca
 npm test
 ```
 
-The tests exercise pagination, escaped HTML output, the form, successful creates and redirects, invalid input, and API failures using a stubbed HubSpot client. They do not change CRM data.
+The tests exercise pagination, escaped HTML output, the form, successful creates and redirects, invalid input, and API failures using a stubbed HubSpot client. Setup tests verify the account guard, reuse of existing records, and the required contact association. They do not change CRM data or open listening sockets.
 
-Verified on 19 November 2026: all six tests pass. Live API checks retrieved the three seeded jobs, rendered the form, and created a fourth record named **Practicum form verification** through the POST route. The POST returned a 303 redirect and the new job appeared in the homepage table. Re-running setup preserved the original three sample record IDs.
+Verified on 19 November 2026: all nine tests pass. Live API checks retrieved the three seeded jobs, rendered the form, and created a fourth record named **Practicum form verification** through the POST route. The POST returned a 303 redirect and the new job appeared in the homepage table. Re-running setup preserved the original three sample record IDs.
 
 ## References
 
