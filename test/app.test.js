@@ -5,13 +5,13 @@ const inject = require('light-my-request');
 
 async function withApp(client, run) {
   const app = createApp({ client, objectType: '2-12345' });
-  const request = async (method, url, body) => {
+  const request = async (method, url, body, extraHeaders = {}) => {
     const result = await inject(app, {
-      method, url, ...(body ? { payload: body, headers: { 'content-type': 'application/x-www-form-urlencoded' } } : {})
+      method, url, headers: { host: '127.0.0.1:3000', ...(body ? { 'content-type': 'application/x-www-form-urlencoded' } : {}), ...extraHeaders }, ...(body ? { payload: body } : {})
     });
     return { status: result.statusCode, headers: new Headers(result.headers), text: async () => result.payload };
   };
-  await run({ get: url => request('GET', url), post: (url, body) => request('POST', url, body) });
+  await run({ get: url => request('GET', url), post: (url, body, headers) => request('POST', url, body, headers) });
 }
 function submit(base, values) {
   return base.post('/update-cobj', new URLSearchParams(values).toString());
@@ -74,6 +74,21 @@ test('bad values stay in the form and cannot make an upstream write', async () =
       assert.match(await response.text(), /role="alert"/);
     }
     assert.equal(writes, 0);
+  });
+});
+
+test('form rejects foreign origins while accepting its own origin', async () => {
+  let writes = 0;
+  const body = new URLSearchParams({ name: 'Job', job_type: 'Automation', estimated_hours: '2' }).toString();
+  await withApp({ post: async () => { writes++; return { data: { id: '1' } }; } }, async base => {
+    for (const origin of ['https://unrelated.example', 'null', 'http://127.0.0.1:9000']) {
+      const response = await base.post('/update-cobj', body, { origin });
+      assert.equal(response.status, 403);
+    }
+    assert.equal(writes, 0);
+    const response = await base.post('/update-cobj', body, { origin: 'http://127.0.0.1:3000' });
+    assert.equal(response.status, 303);
+    assert.equal(writes, 1);
   });
 });
 

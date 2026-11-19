@@ -63,6 +63,17 @@ function createApp({ client, objectType = process.env.CUSTOM_OBJECT_TYPE } = {})
   });
 
   app.post('/update-cobj', async (req, res) => {
+    // Prevent another website from posting to this local app with its saved token.
+    const origin = req.get('origin');
+    if (origin) {
+      let sameOrigin = false;
+      try {
+        sameOrigin = new URL(origin).origin === new URL(`${req.protocol}://${req.get('host')}`).origin;
+      } catch { /* Invalid and opaque origins are rejected below. */ }
+      if (!sameOrigin) {
+        return res.status(403).render('error', { title: 'Unable to submit this form', message: 'Open the form from the Workshop Jobs homepage and try again.' });
+      }
+    }
     const { values, errors } = validateJob(req.body);
     const locals = { title: 'Update Custom Object Form | Integrating With HubSpot I Practicum', values, errors, jobTypes: JOB_TYPES };
     if (errors.length) return res.status(400).render('updates', locals);

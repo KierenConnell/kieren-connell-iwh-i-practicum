@@ -44,7 +44,7 @@ Open **http://127.0.0.1:3000**. Use **Add to this table** to create a job. Savin
 | GET | `/update-cobj` | Render the three-field form in `updates.pug` |
 | POST | `/update-cobj` | Validate input, create a record through HubSpot's API, then redirect home |
 
-Invalid submissions preserve entered values and display errors. Upstream failures show a useful message without exposing access tokens or request configuration. The app binds to the local loopback interface.
+Invalid submissions preserve entered values and display errors. Upstream failures show a useful message without exposing access tokens or request configuration. The app binds to the local loopback interface and rejects form submissions from a different origin.
 
 ## Reproduce the test data
 
@@ -70,7 +70,7 @@ npm test
 
 The tests exercise pagination, escaped HTML output, the form, successful creates and redirects, invalid input, and API failures using a stubbed HubSpot client. Setup tests verify the account guard, reuse of existing records, and the required contact association. They do not change CRM data or open listening sockets.
 
-Verified on 19 November 2026: all nine tests pass. Live API checks retrieved the three seeded jobs, rendered the form, and created a fourth record named **Practicum form verification** through the POST route. The POST returned a 303 redirect and the new job appeared in the homepage table. Re-running setup preserved the original three sample record IDs.
+Verified on 19 November 2026: all ten tests pass. Live API checks retrieved the three seeded jobs, rendered the form, and created a fourth record named **Practicum form verification** through the POST route. The POST returned a 303 redirect and the new job appeared in the homepage table. Re-running setup preserved the original three sample record IDs. A regression test confirms that requests from a different origin are refused before any API write, while a form from the app's own origin still works.
 
 ## References
 
