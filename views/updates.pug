@@ -1,28 +1,29 @@
 doctype html
-html
+html(lang='en')
   head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     title= title
     link(rel='stylesheet', href='/css/style.css')
   body
-    h1= title
-
-    a(href='/') Return to the homepage
-
-    form(action='/update-cobj', method='POST')
-      div
+    main
+      p.eyebrow Workshop Jobs
+      h1 Add a workshop job
+      a(href='/') Return to the homepage
+      if errors.length
+        .errors(role='alert')
+          p Please check the following:
+          ul
+            each error in errors
+              li= error
+      form(action='/update-cobj', method='post')
         label(for='name') Name
-        input#name(type='text', name='name', required)
-
-      div
-        label(for='times_died') Times Died
-        input#times_died(type='number', name='times_died', min='0', step='1', required)
-
-      div
-        label(for='likes_cartman') Likes Cartman
-        select#likes_cartman(name='likes_cartman', required)
-          option(value='') Select an option
-          option(value='Yes') Yes
-          option(value='No') No
-          option(value='Sometimes') Sometimes
-
-      button(type='submit') Save
+        input#name(type='text', name='name', value=values.name, required, maxlength='200', autocomplete='off')
+        label(for='job_type') Job type
+        select#job_type(name='job_type', required)
+          option(value='') Choose a job type
+          each jobType in jobTypes
+            option(value=jobType, selected=values.job_type === jobType)= jobType
+        label(for='estimated_hours') Estimated hours
+        input#estimated_hours(type='number', name='estimated_hours', value=values.estimated_hours, min='0.01', max='10000', step='any', required)
+        button(type='submit') Save job

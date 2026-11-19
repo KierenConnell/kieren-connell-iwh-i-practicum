@@ -1,31 +1,30 @@
 doctype html
-html
+html(lang='en')
   head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     title= title
     link(rel='stylesheet', href='/css/style.css')
   body
-    h1 Custom Object Table
-
-    a(href='/update-cobj') Add/Update this table
-
-    .layout
-      if records && records.length
-        table
-          thead
-            tr
-              th Name
-              th Times Died
-              th Likes Cartman
-          tbody
-            each record in records
+    main
+      p.eyebrow Integrating With HubSpot I · Practicum 2026
+      h1 Workshop Jobs
+      p Keep track of small automation, integration and internal tool jobs.
+      a.button(href='/update-cobj') Add to this table
+      if records.length
+        .table-wrap
+          table
+            caption= `${records.length} workshop job${records.length === 1 ? '' : 's'}`
+            thead
               tr
-                td= record.properties.name
-                td= record.properties.times_died
-                td= record.properties.likes_cartman
+                th(scope='col') Name
+                th(scope='col') Job type
+                th(scope='col') Estimated hours
+            tbody
+              each record in records
+                tr
+                  td= record.properties.name
+                  td= record.properties.job_type
+                  td= record.properties.estimated_hours
       else
-        p No records found yet. Try adding one!
-
-      img.sp-sign(
-        src='https://upload.wikimedia.org/wikipedia/commons/f/ff/South_park_sign.svg',
-        alt='South Park sign'
-      )
+        p.empty No jobs yet. Add your first job using the button above.

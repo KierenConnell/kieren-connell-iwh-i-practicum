@@ -1,17 +1,26 @@
 {
-    "name": "integrating-with-hubspot-i-foundations-practicum",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "HubSpot Academy learner",
-    "license": "ISC",
-    "dependencies": {
-        "axios": "^1.3.5",
-        "dotenv": "^17.2.3",
-        "express": "^4.18.2",
-        "pug": "^3.0.2"
-    }
+  "name": "kieren-connell-iwh-i-practicum",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Workshop jobs practicum for Integrating With HubSpot I: Foundations",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "setup": "node scripts/setup.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "author": "Kieren Connell",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.20.0",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.3",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "light-my-request": "^6.8.1"
+  }
 }
